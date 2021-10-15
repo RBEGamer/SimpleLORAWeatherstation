@@ -8,8 +8,20 @@ The FH Aachen makerspace lora based dht22 solar powered sensor node
 
 #### Device-Profile
 
+Create a new Device Profile and use this for each sensor of this type later on.
 
-#### CODEC: Javascript Decode Function
+##### GENERAL
+
+* `Device-profile name` => `abp_dht22_sensor_node_profile`
+* `LoRaWAN MAC version` => `1.0.3` 
+* `LoRaWAN Regional Parameters revision *` => `A`
+* `ADR algorithm` => `Default ADR algorithm`
+* `Max EIRP *` => `0` 
+* `Uplink interval (seconds)` => `5` 
+
+
+
+##### CODEC: Javascript Decode Function
 
 ```js
 // Decode decodes an array of bytes into an object.
