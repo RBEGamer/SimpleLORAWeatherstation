@@ -1,11 +1,15 @@
 # MSFHAC_Lora_DHT22_Node
 The FH Aachen makerspace lora based dht22 solar powered sensor node
 
+## SETUP
 
 
+### ChirpStack
 
-### ChirpStack Javascript Decode Function
+#### Device-Profile
 
+
+#### CODEC: Javascript Decode Function
 
 ```js
 // Decode decodes an array of bytes into an object.
@@ -24,3 +28,5 @@ function Decode(fPort, bytes) {
     
 }
 ```
+
+#### Application
