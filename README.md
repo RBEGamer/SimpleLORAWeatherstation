@@ -66,9 +66,18 @@ Somit wird das RFM95 Modul folgendermassen mit dem Arduino Nano verbunden:
 | D3            	| DIO1       	|
 | D4            	| DIO4       	|
 
-__HINWEIS__
 
-Bei moeglichen Problemen bitte alle! GND Anschluessen des RFM95 Moduls mit dem entsprechenden GND Pins des Arduinos verbinden!
+**Bei moeglichen Problemen bitte alle! GND Anschluessen des RFM95 Moduls mit dem entsprechenden GND Pins des Arduinos verbinden!**
+
+
+Nachdem das RFM Modul verbunden wurde, kann anschliessend der DHT22 Sensor verbunden werden.
+Dieser stellt jedoch nur ein Beipiel dar und es können später auch andere Sensoren verwendet werden.
+Er verwendet zur Kommunikation eines Bus-Protokoll welches über einen GPIO die Sensordaten an den Arduino schicken kann.
+Somit wird nur ein Pin am Arduino belegt.
+Der Bus wir in einer Pull-Up Konfiguration betrieben, somit muss ein zusaetzlicher 10k Widerstand gegen 3.3V und dem Daten-Pin vorhanden sein.
+
+
+
 
 
 
