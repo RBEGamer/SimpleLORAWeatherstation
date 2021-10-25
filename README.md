@@ -1,7 +1,39 @@
 # MSFHAC_Lora_DHT22_Node
-The FH Aachen makerspace lora based dht22 solar powered sensor node
+
+Einfacher Temperatur und rel. Luftfeuchtigkeits Lora-Wan Sensor basierend auf dem DHT22 und RFM95/RFM96 im zusammenspiel mit einem Arduino Nano.
+
+
+## BEISPIELHAFTER AUFBAU
+
+
 
 ## SETUP
+
+### HARDWARE SETUP
+
+#### KOMPONENTEN
+
+* Arduino Nano
+* DHT22
+* RFM95, RFM95W oder RFM95
+* Steckbrett
+* Jumperwires
+
+#### OPTINALE KOMPONENTEN
+
+* 3D Gedrucktes Gehäuse - Alle Dateien befinden sich in `./src/src_stl`
+
+
+* `Adafruit Universal USB DC Solar Lithium Ion Polymer Lipo Charger` - Solar Support
+* `10W Solarpanel 12V ` - Solar Support
+* `iPo Akku Lithium-Ion Polymer Batterie 3,7V 2000mAh` - Solar Support
+
+
+#### SCHALTUNG
+
+
+
+
 
 
 ### ChirpStack
