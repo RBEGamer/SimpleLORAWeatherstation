@@ -96,8 +96,22 @@ Somit wird der 10K Widerstand zwischen DHT Pin 1 und DHT Pin 2 eingebaut.
 
 ### SOFTWARE SETUP ARDUINO
 
+Der Arduino Nano wird mit der Aruino IDE programmiert. Fuer die verwendeten Bauteile müssen jedoch noch bereits fertige Bibliotheken installiert werden, welche die einfache Ansteuerung des RFM95 Moduls, sowie des DHT22 ermöglichen. Auch das LoraWan-Protokoll welches hier verwendet wird, gibt es bereits in einer entsprechenden Bibliothek. Die folgenden Bibliotheken müssen installiert werden. Da kann entwieder durch den Arduino-Library Manager geschehen oder durch das kopieren der entsprechenden Dateien aus dem `src_arduino/required_libraries` in das `Dokumente/Arduino/library`Verzeichnis des PCs.
 
 
+| Arduino Bibliothek Name 	|
+|-------------------------	|
+| Adafruit_Unified_Sensor 	|
+| DHT_sensor_library      	|
+| IBM_LMIC_framework      	|
+
+Alle anderen Softwarekomponenten bringt die Arduino IDE schon mit der Installation mit, so z.B. auch fuer die SPI Kommunikation.
+
+Nach der Installation oder des Kopierens der Bibliotheken, kann der Quellcode für diesen Sensor geöffnet werden.
+Dieser befindet sich im Ordner `src_arduino/lora_dht22_apb/lora_dht22_apb.ino`.
+Hier wurden schon die notwendigen Einstellungen für die oben genannten Pinbelegungen gesetzt.
+
+Hier sind auch bereits die Einstellungen für die Lora Kommunikation gesetzt. Jeder Sensor besitzt seine eigene feste ID, mit der er sich im LoraWan-Netzwerk identifizieren kann. Diese muss zuerst im folgenden Abschnitt erstellt werden, bevor der Code auf den Arduino aufgespielt werden kann.
 
 
 
