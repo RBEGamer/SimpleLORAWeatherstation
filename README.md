@@ -18,11 +18,12 @@ Einfacher Temperatur und rel. Luftfeuchtigkeits Lora-Wan Sensor basierend auf de
 * RFM95, RFM95W oder RFM95
 * Steckbrett
 * Jumperwires
+* 
 
 #### OPTINALE KOMPONENTEN
 
 * 3D Gedrucktes Gehäuse - Alle Dateien befinden sich in `./src/src_stl`
-
+* `Abzweigdose IP54 aufputz 150x110x70mm`
 
 * `Adafruit Universal USB DC Solar Lithium Ion Polymer Lipo Charger` - Solar Support
 * `10W Solarpanel 12V ` - Solar Support
