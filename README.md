@@ -22,7 +22,7 @@ Einfacher Temperatur und rel. Luftfeuchtigkeits Lora-Wan Sensor basierend auf de
 
 #### OPTINALE KOMPONENTEN
 
-* 3D Gedrucktes Gehäuse - Alle Dateien befinden sich in `./src/src_stl`
+* 3D Gedrucktes Gehäuse - Alle Dateien befinden sich in `src/src_stl`
 * `Abzweigdose IP54 aufputz 150x110x70mm`
 
 * `Adafruit Universal USB DC Solar Lithium Ion Polymer Lipo Charger` - Solar Support
@@ -39,7 +39,7 @@ Einfacher Temperatur und rel. Luftfeuchtigkeits Lora-Wan Sensor basierend auf de
 Der Aufbau der Schaltung ist relative einfach. Jedoch kann das `RFM95` Modul nicht direkt auf das Steckbrett gesteckt werden, da dies ein anderes Rastermass von 2.0mm verwendet und das Steckbrett 2.54mm. Somit gibt es hier zwei Möglichkeiten:
 
 * Jumperwires direkt an das `RFM95` Modul anloeten.
-* Eine Adapter-Platine verwenden - `./src/src_rfmbreadboardadapter` 
+* Eine Adapter-Platine verwenden - `src/src_rfmbreadboardadapter` 
 
 
 Der Arduino Nano und das RFM95 Module kommunizieren ueber den SPI Bus miteinander. Zusaetzlich verwendet das RFM95 Modul 4 weitere GPIO Pins des Arduino, um mit diesen weitere Statusinformationen auszutauschen. Hierzu gehoeren unter anderem ein RESET Signal und ein Empfangs-Event-Signal.
