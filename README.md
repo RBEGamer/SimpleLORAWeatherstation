@@ -53,7 +53,18 @@ Der SPI Buse besteht in dieser Konfiguration aus den Folgenden Signalen:
 
 Somit wird das RFM95 Modul folgendermassen mit dem Arduino Nano verbunden:
 
-
+| Arduino Nano  	| RFM95      	|
+|---------------	|------------	|
+| GND           	| GND        	|
+| 3V3           	| 3.3V / VCC 	|
+| D13           	| SCK        	|
+| D12           	| MISO       	|
+| D11           	| MOSI       	|
+| D10           	| NSS        	|
+| D5            	| RST        	|
+| D2            	| DIO0       	|
+| D3            	| DIO1       	|
+| D4            	| DIO4       	|
 
 __HINWEIS__
 
