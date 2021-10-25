@@ -75,8 +75,13 @@ Dieser stellt jedoch nur ein Beipiel dar und es können später auch andere Sens
 Er verwendet zur Kommunikation eines Bus-Protokoll welches über einen GPIO die Sensordaten an den Arduino schicken kann.
 Somit wird nur ein Pin am Arduino belegt.
 Der Bus wir in einer Pull-Up Konfiguration betrieben, somit muss ein zusaetzlicher 10k Widerstand gegen 3.3V und dem Daten-Pin vorhanden sein.
+Somit wird der 10K Widerstand zwischen DHT Pin 1 und DHT Pin 2 eingebaut.
 
-
+| Arduino Nano 	| DHT22        	|
+|--------------	|--------------	|
+| GND          	| Pin 4 (GND)  	|
+| 3V3          	| Pin 1 (VCC)  	|
+| D6           	| Pin 2 (Data) 	|
 
 
 
