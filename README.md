@@ -5,6 +5,16 @@ Einfacher Temperatur und rel. Luftfeuchtigkeits Lora-Wan Sensor basierend auf de
 
 ## BEISPIELHAFTER AUFBAU
 
+### FINALER SENSOR
+
+![FINALER_SENSOR](documenation/images/finaler_sensor_beispiel.jpg)
+
+
+### STECKBRETT MIT ADAPTERPLATINE
+
+![PCB](documenation/images/finaler_sensor_pcb.jpg)
+
+
 
 
 ## SETUP
@@ -82,6 +92,15 @@ Somit wird der 10K Widerstand zwischen DHT Pin 1 und DHT Pin 2 eingebaut.
 | GND          	| Pin 4 (GND)  	|
 | 3V3          	| Pin 1 (VCC)  	|
 | D6           	| Pin 2 (Data) 	|
+
+
+### SOFTWARE SETUP ARDUINO
+
+
+
+
+
+
 
 
 
