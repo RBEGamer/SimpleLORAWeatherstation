@@ -221,6 +221,18 @@ Diese müssen jetzt im Programm wie folgt eingegeben werden:
 ```
 
 
+Anschließend kann das Programm kompiliert und Hochgeladen werden.
+Hierzu muss zuvor noch das passende Arduino Board ausgewählt werden.
+
+Im Menü unter Werkzeug kann dies eingestellt werden:
+
+| Arduino Nano Board-Settings 	|      Wert                         |
+|-------------------------	|-------------------------	            |
+| Board                   	| Arduino Nano                          |
+| Prozessor               	| ATmega380p (Old Bootloader)           | 
+| Port                     	| COMxx (WIN), /dev/ttyXX (Linux, Mac)  |
+
+
 
 
 ### ChirpStack
