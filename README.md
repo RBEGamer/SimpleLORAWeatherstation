@@ -133,10 +133,10 @@ Nach der Registrierung eines Accounts, bietet das TTN in der TTN Console zwei m�
 Das TTN gruppiert mehrere Lora-Devices in Applications, daher muss zuerst eine neue Application mit einem beliebigen Namen erstellt werden.
 
 
-![Register Application](documentation/images/ttn_a.png)
+![Register Application](documenation/images/ttn_a.png)
 
 
-![Application](documentation/images/ttn_b.png)
+![Application](documenation/images/ttn_b.png)
 
 Nach der Erstellung kann 체ber den **+ Add Enddevice** Button ein Lora-Wan-Device hinzugef체gt werden.
 Hier m체ssen einige Informationen angegeben werden. Da dies ein selbstbau Sensor ist, gibt es f체r diesen noch kein fertiges Template, welches verwendet werden kann.
@@ -144,7 +144,7 @@ Hier m체ssen einige Informationen angegeben werden. Da dies ein selbstbau Sensor
 Hier muss in den Reiter "Manual" gewechselt werden und die folgenden Daten eingegeben werden:
 
 | Eintrag 	| Wert 	|
-|-------------------------	|
+|-------------------------	|-------------------------	|
 | Frequency plan	| Europe 863-870MHz SF9 for RX2 - recommended |
 | LoRaWAN Version      	| MAC V1.0.3 |
 | Activation mode      	| Activation by personalisation (ABP) |
@@ -152,7 +152,7 @@ Hier muss in den Reiter "Manual" gewechselt werden und die folgenden Daten einge
 Anschliessend auf die drei "Generate" Button klicken und final "Register Device"
 
 
-![End Device Register](documentation/images/ttn_c.png)
+![End Device Register](documenation/images/ttn_c.png)
 
 
 
