@@ -156,6 +156,27 @@ Damit ist die Registrierung des Sensors abgeschlossen.
 ![End Device Register](documenation/images/ttn_c.png)
 
 
+Auf der Übersicht, stehen nun einige Informationen. Hier sind drei Angaben zur Parametrisierung wichtig.
+Diese können in verschiedenen Formaten angezeigt werden. Dazu auf das Auge klicken um den Key anzuzeigen und den "<>" Button um die Darstellung zu ändern.
+In der Folgenden Teablle sind die benötigten Informationen aufgeführt.
+
+| Information               | Darstellung              | Beispiel                 |
+|-------------------------	|------------------------- |------------------------- |
+| Device Adress	            |   HEX, MSB ohne 0x       | 260BA509                 |
+| NwkSKey                   |   HEX, MSB               | 0xE4, 0x14, 0xC5, 0x65, 0x24, 0x2D, 0x7B, 0x60, 0x61, 0x43, 0xD3, 0xC1, 0x49, 0x87, 0x90, 0x45 |
+| AppSKeys                  |   HEX, MSB               | 0x0D, 0x79, 0xB8, 0x87, 0x1D, 0xD4, 0x64, 0xFA, 0xCC, 0x5B, 0x3B, 0xE0, 0x08, 0x0E, 0x7A, 0x22 |
+
+
+
+Der letzte Schritt ist hier nur bei der Entwicklung wichtig.
+Das Netzwerk und der Sensor merken sich wie viele Pakete sie bereits ausgetauscht haben.
+Wenn der Sensor neu Programmiert wird dieser Zähler nicht im EEProm gespeichert ist, unterscheiden sich diese und das Netzwerk nimmt keine Pakete des Sensors mehr an. Deswegen wird zu Testzwecken diese Überprüfung abgeschaltet.
+
+Dazu auf der Sensor-Seite unter `General Settings -> Network Layer -> Advanced MAC settings -> Resets FRame Counter` auf `Enabled` setzten.
+
+
+
+
 
 
 
@@ -182,10 +203,10 @@ Nach der Installation der Bibliotheken, kann der Quellcode für den Sensor geöf
 Dieser befindet sich im Ordner `src_arduino/lora_dht22_apb/lora_dht22_apb.ino`.
 Hier wurden schon die notwendigen Einstellungen für die oben genannten Pinbelegungen gesetzt.
 
+Final muss der Sensor parametrisiert werden und mit dem im TTN Netzwerk angelegten gekoppelt werden.
+Hierzu wurden bei der Registrierung des Sensors im TTN drei verschiedene Keys angelegt.
+Diese müssen jetzt im Programm eingegeben werden.
 
-
-
-Hier sind auch bereits die Einstellungen für die Lora Kommunikation gesetzt. Jeder Sensor besitzt seine eigene feste ID, mit der er sich im LoraWan-Netzwerk identifizieren kann. Diese muss zuerst im folgenden Abschnitt erstellt werden, bevor der Code auf den Arduino aufgespielt werden kann.
 
 
 
