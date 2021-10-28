@@ -94,6 +94,18 @@ Somit wird der 10K Widerstand zwischen DHT Pin 1 und DHT Pin 2 eingebaut.
 | D6           	| Pin 2 (Data) 	|
 
 
+![STECKBRETT_SCHALTUNG](src/src_schematic/sensor_fritzing/lora_sensor_schem_Steckplatine.png)
+
+
+
+
+
+
+
+
+
+
+
 ### SOFTWARE SETUP ARDUINO
 
 Der Arduino Nano wird mit der Aruino IDE programmiert. Fuer die verwendeten Bauteile müssen jedoch noch bereits fertige Bibliotheken installiert werden, welche die einfache Ansteuerung des RFM95 Moduls, sowie des DHT22 ermöglichen. Auch das LoraWan-Protokoll welches hier verwendet wird, gibt es bereits in einer entsprechenden Bibliothek. Die folgenden Bibliotheken müssen installiert werden. Da kann entwieder durch den Arduino-Library Manager geschehen oder durch das kopieren der entsprechenden Dateien aus dem `src_arduino/required_libraries` in das `Dokumente/Arduino/library`Verzeichnis des PCs.
