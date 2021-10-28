@@ -141,18 +141,21 @@ Das TTN gruppiert mehrere Lora-Devices in Applications, daher muss zuerst eine n
 Nach der Erstellung kann über den **+ Add Enddevice** Button ein Lora-Wan-Device hinzugefügt werden.
 Hier müssen einige Informationen angegeben werden. Da dies ein selbstbau Sensor ist, gibt es für diesen noch kein fertiges Template, welches verwendet werden kann.
 
-Hier muss in den Reiter "Manual" gewechselt werden und die folgenden Daten eingegeben werden:
+Hier muss in den Reiter "Manually" gewechselt werden und die folgenden Daten eingegeben werden:
 
 | Eintrag 	| Wert 	|
-|-------------------------	|-------------------------	|
-| Frequency plan	| Europe 863-870MHz SF9 for RX2 - recommended |
-| LoRaWAN Version      	| MAC V1.0.3 |
-| Activation mode      	| Activation by personalisation (ABP) |
+|-------------------------	|-------------------------	                  |
+| Frequency plan	          | Europe 863-870MHz SF9 for RX2 - recommended |
+| LoRaWAN Version      	    | MAC V1.0.3                                  |
+| Activation mode      	    | Activation by personalisation (ABP)         |
 
-Anschliessend auf die drei "Generate" Button klicken und final "Register Device"
+Anschliessend auf die drei "Generate" Buttons klicken und final "Register Device".
+Damit ist die Registrierung des Sensors abgeschlossen.
 
 
 ![End Device Register](documenation/images/ttn_c.png)
+
+
 
 
 
