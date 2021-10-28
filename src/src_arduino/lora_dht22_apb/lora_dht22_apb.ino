@@ -1,7 +1,7 @@
 /*
  * FH Aachen Makerspace
  * The FH Aachen makerspace lora based dht22 solar powered sensor node 
- * Initial Version: Marcel Ochsendorf marcelochsendorf.com 15.10.2021
+ * Initial Version: Marcel Ochsendorf 15.10.2021 https://github.com/RBEGamer/MSFHAC_Lora_DHT22_Node/
  * 
  * 
  * COMPONENTS:
@@ -29,10 +29,14 @@
 
 #define DHTPIN 6 //DHT SENSOR PIN   
 #define DHTTYPE DHT22
-//#define DHTTYPE DHT11
 
 #define CHARHING_OK_INPUT 7 //PIN FOR GETTING CHARGING STATE FROM SOLAR CHARGER LOW IF CHARGING IS ACTIVE
 
+#define RFM95_RST_PIN 5 //RESET
+#define RFM95_NSS_PIN 10 //NSS / CS
+#define RFM95_DIO0_PIN 2 //DIO0
+#define RFM95_DIO1_PIN 3 //DIO1
+#define RFM95_DIO2_PIN 4 //DIO2
 
 //-------------------- LORA CONFIG ----------------------- //
 // NwkSKey MSB
@@ -59,10 +63,10 @@ const unsigned TX_INTERVAL = 60;
 
 // Pin mapping
 const lmic_pinmap lmic_pins = {
-    .nss = 10,
+    .nss = RFM95_NSS_PIN,
     .rxtx = LMIC_UNUSED_PIN,
-    .rst = 5,
-    .dio = {2, 3, 4}, //DIO0 DIO1 DIO2 CONNECT ALL OF THEM
+    .rst = RFM95_RST_PIN,
+    .dio = {RFM95_DIO0_PIN, RFM95_DIO0_PIN, RFM95_DIO0_PIN}, //DIO0 DIO1 DIO2 CONNECT ALL OF THEM
 };
 
 void onEvent (ev_t ev) {

@@ -30,3 +30,6 @@
 *.exe
 *.out
 *.app
+src/src_arduino/.DS_Store
+src/.DS_Store
+src/.DS_Store
