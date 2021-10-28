@@ -7,6 +7,11 @@ Dies ermöglicht den Empfang der Sensordaten über viele Kilometer hinweg.
 Um eine Übertragung der Sensordaten in das Internet zu ermöglichen, wir ein dezentrales Netzwerk aus Empfangsstationen (Gateways) verwendet.
 Diese werden in der Regel von Privatpersonen oder Firmen bereitgestellt.
 
+Ein weiterer Vorteil dieser Architektur ist, dass nicht jeder eine Gateway benötigt, welcher Daten mit seinem Lora-Wan Device senden möchte.
+Natürlich nur solange, wie ein Gateway in Reichweite ist. Dafür gibt es fertige Karten, welche die Abdeckung an einem Ort darstellen.
+
+Diese Gateways können ihre Daten an einen Server im Internet senden, welcher diese dann als z.B. REST-Api bereitstellt.
+In diesem Beispiel verwenden wir das [The Things Network (TTN)](https://www.thethingsnetwork.org).
 
 
 
@@ -14,7 +19,7 @@ Diese werden in der Regel von Privatpersonen oder Firmen bereitgestellt.
 
 
 
-## BEISPIELHAFTER AUFBAU
+## BEISPIELHAFTER AUFBAU DES SENSORS
 
 ### FINALER SENSOR
 
@@ -112,7 +117,42 @@ Die folgende Grafik zeigt einen exemplarischen Aufbau der Schaltung.
 
 
 
+### The Things Network
 
+Um unseren Sensor im späteren Verlauf programmieren können, muss dieser zuerst getauft werden. Jedes Lora-Wan Gerät bekommt eine feste ID von dem zu verwendenen Netzwerk. In diesem Fall ist es das TTN und dort muss der Sensor registriert werden. Nach dieser bekommen wir zwei Schlüssel, welche für eine verschlüsselte Verbindung zwischen benötigt werden. Diese werden dann in das spätere Arduino Programm eingefügt.
+
+
+
+### Application Registrieren
+
+Nach der Registrierung eines Accounts, bietet das TTN in der TTN Console zwei möglichkeiten:
+
+* Application
+* Gateway
+
+Das TTN gruppiert mehrere Lora-Devices in Applications, daher muss zuerst eine neue Application mit einem beliebigen Namen erstellt werden.
+
+
+![Register Application](documentation/images/ttn_a.png)
+
+
+![Application](documentation/images/ttn_b.png)
+
+Nach der Erstellung kann über den **+ Add Enddevice** Button ein Lora-Wan-Device hinzugefügt werden.
+Hier müssen einige Informationen angegeben werden. Da dies ein selbstbau Sensor ist, gibt es für diesen noch kein fertiges Template, welches verwendet werden kann.
+
+Hier muss in den Reiter "Manual" gewechselt werden und die folgenden Daten eingegeben werden:
+
+| Eintrag 	| Wert 	|
+|-------------------------	|
+| Frequency plan	| Europe 863-870MHz SF9 for RX2 - recommended |
+| LoRaWAN Version      	| MAC V1.0.3 |
+| Activation mode      	| Activation by personalisation (ABP) |
+
+Anschliessend auf die drei "Generate" Button klicken und final "Register Device"
+
+
+![End Device Register](documentation/images/ttn_c.png)
 
 
 
