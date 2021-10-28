@@ -172,11 +172,13 @@ Der letzte Schritt ist hier nur bei der Entwicklung wichtig.
 Das Netzwerk und der Sensor merken sich wie viele Pakete sie bereits ausgetauscht haben.
 Wenn der Sensor neu Programmiert wird dieser Zähler nicht im EEProm gespeichert ist, unterscheiden sich diese und das Netzwerk nimmt keine Pakete des Sensors mehr an. Deswegen wird zu Testzwecken diese Überprüfung abgeschaltet.
 
+
+![End Device Register](documenation/images/ttn_d.png)
+
 Dazu auf der Sensor-Seite unter `General Settings -> Network Layer -> Advanced MAC settings -> Resets FRame Counter` auf `Enabled` setzten.
 
 
-
-
+![End Device Register](documenation/images/ttn_e.png)
 
 
 
@@ -205,11 +207,18 @@ Hier wurden schon die notwendigen Einstellungen für die oben genannten Pinbeleg
 
 Final muss der Sensor parametrisiert werden und mit dem im TTN Netzwerk angelegten gekoppelt werden.
 Hierzu wurden bei der Registrierung des Sensors im TTN drei verschiedene Keys angelegt.
-Diese müssen jetzt im Programm eingegeben werden.
 
+Diese müssen jetzt im Programm wie folgt eingegeben werden:
 
-
-
+```c++
+41 | //-------------------- LORA CONFIG ----------------------- //
+42 | // NwkSKey MSB
+43 | static const PROGMEM u1_t NWKSKEY[16] = {0xE4, 0x14, 0xC5, 0x65, 0x24, 0x2D, 0x7B, 0x60, 0x61, 0x43, 0xD3, 0xC1, 0x49, 0x87, 0x90, 0x45 };
+44 | // AppSKey MSB
+45 | static const u1_t PROGMEM APPSKEY[16] = {0x0D, 0x79, 0xB8, 0x87, 0x1D, 0xD4, 0x64, 0xFA, 0xCC, 0x5B, 0x3B, 0xE0, 0x08, 0x0E, 0x7A, 0x22 };
+46 | // LoRaWAN address = '0x' + Device Address 
+47 | static const u4_t DEVADDR = 0x260BA509; //UNIQUE LORA DEVICE ID
+```
 
 
 
