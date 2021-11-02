@@ -27,8 +27,26 @@
 #define BATT_ADC_PIN A0 //BATTERY VOLTAGE ADC PIN
 #define BATT_ADC_MAX_RANGE 5.0 //ADC VALUE * (BATT_ADC_MAX_RANGE*1023) => ON 3.3V MCU SET THIS TO 3.3V
 
+
+//#define SENSOR_TYPE_DHT22
+#define SENSOR_TYPE_IKEA_VINDRIKTNING
+
+
+
+
+#ifdef SENSOR_TYPE_DHT22
 #define DHTPIN 6 //DHT SENSOR PIN   
 #define DHTTYPE DHT22
+DHT dht(DHTPIN, DHTTYPE); //Der Sensor wird ab jetzt mit „dth“ angesprochen
+#endif
+
+#ifdef SENSOR_TYPE_IKEA_VINDRIKTNING
+#include "IkeaVindriktningSerialCom.h" 
+#include "IkeaVindriktningTypes.h"
+particleSensorState_t state;
+#endif
+
+
 
 #define CHARHING_OK_INPUT 7 //PIN FOR GETTING CHARGING STATE FROM SOLAR CHARGER LOW IF CHARGING IS ACTIVE
 
@@ -39,24 +57,34 @@
 #define RFM95_DIO2_PIN 4 //DIO2
 
 //-------------------- LORA CONFIG ----------------------- //
+
+#ifdef SENSOR_TYPE_DHT22
 // NwkSKey MSB
 static const PROGMEM u1_t NWKSKEY[16] = {0xCC, 0x46, 0x1B, 0x83, 0xF1, 0x79, 0xAB, 0x6D, 0x73, 0x0E, 0x7D, 0xC4, 0x9F, 0x54, 0x18, 0xDA };
 // AppSKey MSB
 static const u1_t PROGMEM APPSKEY[16] = { 0x4B, 0x51, 0x95, 0xA5, 0x45, 0x1F, 0xA9, 0x76, 0xD9, 0x50, 0xB4, 0xDA, 0x29, 0xAF, 0x01, 0x6E };
 // LoRaWAN address
 static const u4_t DEVADDR = 0x260B1A42; //UNIQUE LORA DEVICE ID
+#endif
+
+#ifdef SENSOR_TYPE_IKEA_VINDRIKTNING
+// NwkSKey MSB
+static const PROGMEM u1_t NWKSKEY[16] = {0x66, 0x1F, 0x14, 0x94, 0xC2, 0xA7, 0x7C, 0x0F, 0xE6, 0x50, 0x75, 0xDA, 0xDA, 0x73, 0x33, 0x00 };
+// AppSKey MSB
+static const u1_t PROGMEM APPSKEY[16] = { 0xB8, 0xC7, 0x43, 0x72, 0x2A, 0xD5, 0x60, 0x41, 0x1D, 0x6E, 0xEA, 0x57, 0xEA, 0x33, 0x14, 0xFB };
+// LoRaWAN address
+static const u4_t DEVADDR = 0x260B478B; //UNIQUE LORA DEVICE ID
+#endif
 
 
 
 //--------------------- END CONFIG ---------------------- //
-DHT dht(DHTPIN, DHTTYPE); //Der Sensor wird ab jetzt mit „dth“ angesprochen
-
 
 void os_getArtEui (u1_t* buf) { }
 void os_getDevEui (u1_t* buf) { }
 void os_getDevKey (u1_t* buf) { }
 
-static uint8_t payload[] = "..................."; //INCREASE FOR LARGER PAYLOADS 
+static uint8_t payload[] = "........................."; //INCREASE FOR LARGER PAYLOADS 
 static osjob_t sendjob;
 
 const unsigned TX_INTERVAL = 60;
@@ -136,7 +164,10 @@ void onEvent (ev_t ev) {
 
 
 String payload_str = "";
-void create_payload_buffer(){
+
+
+#ifdef SENSOR_TYPE_DHT22
+void prepare_payload_dht22(){
   float Luftfeuchtigkeit = dht.readHumidity(); //die Luftfeuchtigkeit auslesen und unter „Luftfeutchtigkeit“ speichern
   float Temperatur = dht.readTemperature();//die Temperatur auslesen und unter „Temperatur“ speichern
   payload_str = "";
@@ -156,7 +187,31 @@ void create_payload_buffer(){
    payload_str.concat(Luftfeuchtigkeit);
   }
   payload_str += ";";
+  }
+#endif
 
+#ifdef SENSOR_TYPE_IKEA_VINDRIKTNING
+void prepare_payload_vindriking(){
+    payload_str = "";
+    payload_str.concat(state.avgPM25);
+    payload_str += ";";
+    
+    
+  }
+#endif
+
+void create_payload_buffer(){
+  
+  #ifdef SENSOR_TYPE_DHT22
+  prepare_payload_dht22();
+  #endif
+
+  #ifdef SENSOR_TYPE_IKEA_VINDRIKTNING
+  prepare_payload_vindriking();
+  #endif
+
+  
+  //ADD BATTERY AND CHARGING STATE
   float batt = analogRead(BATT_ADC_PIN);
   batt = batt * (BATT_ADC_MAX_RANGE/1023);
   payload_str.concat(batt);
@@ -166,12 +221,28 @@ void create_payload_buffer(){
   payload_str.concat(ch_ok);
   payload_str += ";";
 
+
+  #ifdef SENSOR_TYPE_DHT22
+    payload_str += "DHT22;";
+  #endif
+  
+  #ifdef SENSOR_TYPE_IKEA_VINDRIKTNING
+    payload_str += "PM25;";
+  #endif
+
+
+
   
    //CUT DOWN LENGTH
   int sz = payload_str.length();
   if(sizeof(payload) > payload_str.length()){
     sz = sizeof(payload);
   }
+
+  for(int i = 0; i < sizeof(payload); i++){
+    payload[i] = 0;  
+  }
+  
   //COPY INTO CHAR ARRAY
   payload_str.toCharArray(payload, sz);
   Serial.println(payload_str);
@@ -198,7 +269,7 @@ void do_send(osjob_t* j){
 }
 
 void setup() {
-    Serial.begin(115200);
+    Serial.begin(9600);
     Serial.println(F("Starting"));
 
     pinMode(CHARHING_OK_INPUT, INPUT_PULLUP);
@@ -258,13 +329,22 @@ void setup() {
 
 
 
-
+    #ifdef SENSOR_TYPE_DHT22
     //SETUP DHT22 
     dht.begin(); //DHT11 Sensor starten
+    #endif
+
+    #ifdef SENSOR_TYPE_IKEA_VINDRIKTNING
+     IkeaVindriktningSerialCom::setup();
+    #endif
+
+
+    
     // Start job
     do_send(&sendjob);
 }
 
 void loop() {
     os_runloop_once();
+    IkeaVindriktningSerialCom::handleUart(state);
 }
