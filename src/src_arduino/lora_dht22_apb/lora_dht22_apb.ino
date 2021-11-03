@@ -17,7 +17,7 @@
 
 
 
-//#define SENSOR_TYPE_DHT22
+#define SENSOR_TYPE_DHT22
 #define SENSOR_TYPE_IKEA_VINDRIKTNING
 
 
@@ -51,6 +51,7 @@ particleSensorState_t state;
 
 
 
+static uint8_t payload[256] = { 0 }; //INCREASE FOR LARGER PAYLOADS 
 
 
 #define RFM95_RST_PIN 5 //RESET
@@ -61,11 +62,11 @@ particleSensorState_t state;
 
 //-------------------- LORA CONFIG ----------------------- //
 
-#ifdef SENSOR_TYPE_DHT22
-static const PROGMEM u1_t NWKSKEY[16] = {0xCC, 0x46, 0x1B, 0x83, 0xF1, 0x79, 0xAB, 0x6D, 0x73, 0x0E, 0x7D, 0xC4, 0x9F, 0x54, 0x18, 0xDA };
-static const u1_t PROGMEM APPSKEY[16] = { 0x4B, 0x51, 0x95, 0xA5, 0x45, 0x1F, 0xA9, 0x76, 0xD9, 0x50, 0xB4, 0xDA, 0x29, 0xAF, 0x01, 0x6E };
-static const u4_t DEVADDR = 0x260B1A42;
-#endif
+//#ifdef SENSOR_TYPE_DHT22
+//static const PROGMEM u1_t NWKSKEY[16] = {0xCC, 0x46, 0x1B, 0x83, 0xF1, 0x79, 0xAB, 0x6D, 0x73, 0x0E, 0x7D, 0xC4, 0x9F, 0x54, 0x18, 0xDA };
+//static const u1_t PROGMEM APPSKEY[16] = { 0x4B, 0x51, 0x95, 0xA5, 0x45, 0x1F, 0xA9, 0x76, 0xD9, 0x50, 0xB4, 0xDA, 0x29, 0xAF, 0x01, 0x6E };
+//static const u4_t DEVADDR = 0x260B1A42;
+//#endif
 
 #ifdef SENSOR_TYPE_IKEA_VINDRIKTNING
 static const PROGMEM u1_t NWKSKEY[16] = {0x66, 0x1F, 0x14, 0x94, 0xC2, 0xA7, 0x7C, 0x0F, 0xE6, 0x50, 0x75, 0xDA, 0xDA, 0x73, 0x33, 0x00 };
@@ -81,7 +82,7 @@ void os_getArtEui (u1_t* buf) { }
 void os_getDevEui (u1_t* buf) { }
 void os_getDevKey (u1_t* buf) { }
 
-static uint8_t payload[] = "........................."; //INCREASE FOR LARGER PAYLOADS 
+
 static osjob_t sendjob;
 
 const unsigned TX_INTERVAL = 60;
@@ -170,6 +171,7 @@ String payload_str = "";
 
 #ifdef SENSOR_TYPE_DHT22
 void prepare_payload_dht22(){
+  payload_str += "TEMP=";
   float Luftfeuchtigkeit = dht.readHumidity(); //die Luftfeuchtigkeit auslesen und unter „Luftfeutchtigkeit“ speichern
   float Temperatur = dht.readTemperature();//die Temperatur auslesen und unter „Temperatur“ speichern
 
@@ -179,7 +181,7 @@ void prepare_payload_dht22(){
   }else{
    payload_str.concat(Temperatur);
   }
-  payload_str += ";";
+  payload_str += ";HUM=";
 
   //ADD HUMIDITY
   if(isnan(Luftfeuchtigkeit)){
@@ -187,23 +189,29 @@ void prepare_payload_dht22(){
   }else{
    payload_str.concat(Luftfeuchtigkeit);
   }
+
+  payload_str += ";";
+
   }
 #endif
 
 #ifdef SENSOR_TYPE_IKEA_VINDRIKTNING
 void prepare_payload_vindriking(){
-
+      payload_str += "PM25=";
       for(int i = 0; i < 1000; i++){
         IkeaVindriktningSerialCom::handleUart(state);
         delay(10);
-      }
-
-      
+      } 
     payload_str += String(state.lastPM25); 
+    payload_str += ";";
+
   }
 #endif
 
-void create_payload_buffer(){
+
+
+
+int create_payload_buffer(){
   payload_str = "";
   
   #ifdef SENSOR_TYPE_DHT22
@@ -214,32 +222,26 @@ void create_payload_buffer(){
   prepare_payload_vindriking();
   #endif
 
-  payload_str += ";";
+  payload_str += "BATT=";
   //ADD BATTERY AND CHARGING STATE
   float batt = analogRead(BATT_ADC_PIN);
   batt = batt * (BATT_ADC_MAX_RANGE/1023);
   payload_str.concat(batt);
-  payload_str += ";";
+  payload_str += ";CHG=";
 
   const bool ch_ok= !digitalRead(CHARHING_OK_INPUT);
   payload_str.concat(ch_ok);
   payload_str += ";";
 
 
-  #ifdef SENSOR_TYPE_DHT22
-    payload_str += "DHT22;";
-  #endif
   
-  #ifdef SENSOR_TYPE_IKEA_VINDRIKTNING
-    payload_str += "PM25;";
-  #endif
 
 
 
   
    //CUT DOWN LENGTH
   int sz = payload_str.length();
-  if(sizeof(payload) > payload_str.length()){
+  if(payload_str.length()> sizeof(payload)){
     sz = sizeof(payload);
   }
 
@@ -252,7 +254,8 @@ void create_payload_buffer(){
   Serial.println(payload_str);
   Serial.println((char*)payload);
 
-
+  
+  return sz;
   
   }
 
@@ -264,9 +267,14 @@ void do_send(osjob_t* j){
     } else {
 
         //CREATE PAYLOAD BUFFER
-        create_payload_buffer();
-        // Prepare upstream data transmission at the next possible time.
-        LMIC_setTxData2(1, payload, sizeof(payload)-1, 0);
+        int buffer_len = create_payload_buffer();
+
+        if(buffer_len > sizeof(payload)){
+          buffer_len = sizeof(payload);
+        }
+        
+        
+        LMIC_setTxData2(1, payload, buffer_len-1, 0);
         Serial.println(F("Packet queued"));
     }
     // Next TX is scheduled after TX_COMPLETE event.
