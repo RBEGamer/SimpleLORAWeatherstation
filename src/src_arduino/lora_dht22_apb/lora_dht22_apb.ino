@@ -358,7 +358,7 @@ void setup() {
 
 unsigned long prev = 0;
 unsigned long curr = 0;
-const int interval = 1000*60;
+const int interval = 1000*120;
 
 
 void loop() {
