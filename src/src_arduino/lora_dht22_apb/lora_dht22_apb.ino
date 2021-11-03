@@ -171,7 +171,7 @@ String payload_str = "";
 
 #ifdef SENSOR_TYPE_DHT22
 void prepare_payload_dht22(){
-  payload_str += "TEMP=";
+  payload_str += "f=TEMP=";
   float Luftfeuchtigkeit = dht.readHumidity(); //die Luftfeuchtigkeit auslesen und unter „Luftfeutchtigkeit“ speichern
   float Temperatur = dht.readTemperature();//die Temperatur auslesen und unter „Temperatur“ speichern
 
@@ -181,7 +181,7 @@ void prepare_payload_dht22(){
   }else{
    payload_str.concat(Temperatur);
   }
-  payload_str += ";HUM=";
+  payload_str += ";f=HUM=";
 
   //ADD HUMIDITY
   if(isnan(Luftfeuchtigkeit)){
@@ -197,7 +197,7 @@ void prepare_payload_dht22(){
 
 #ifdef SENSOR_TYPE_IKEA_VINDRIKTNING
 void prepare_payload_vindriking(){
-      payload_str += "PM25=";
+      payload_str += "f=PM25=";
       for(int i = 0; i < 1000; i++){
         IkeaVindriktningSerialCom::handleUart(state);
         delay(10);
@@ -222,12 +222,12 @@ int create_payload_buffer(){
   prepare_payload_vindriking();
   #endif
 
-  payload_str += "BATT=";
+  payload_str += "f=BATT=";
   //ADD BATTERY AND CHARGING STATE
   float batt = analogRead(BATT_ADC_PIN);
   batt = batt * (BATT_ADC_MAX_RANGE/1023);
   payload_str.concat(batt);
-  payload_str += ";CHG=";
+  payload_str += ";i=CHG=";
 
   const bool ch_ok= !digitalRead(CHARHING_OK_INPUT);
   payload_str.concat(ch_ok);
@@ -237,8 +237,8 @@ int create_payload_buffer(){
   
 
 
-
-  
+    
+   payload_str += "s=FW=42;";
    //CUT DOWN LENGTH
   int sz = payload_str.length();
   if(payload_str.length()> sizeof(payload)){
