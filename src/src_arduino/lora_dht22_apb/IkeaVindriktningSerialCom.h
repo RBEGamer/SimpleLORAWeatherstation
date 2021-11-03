@@ -11,8 +11,8 @@
 #include "IkeaVindriktningTypes.h"
 
 namespace IkeaVindriktningSerialCom {
-    constexpr static const uint8_t PIN_UART_RX = 7; // D2 on Wemos D1 Mini
-    constexpr static const uint8_t PIN_UART_TX = 8; // UNUSED
+    constexpr static const uint8_t PIN_UART_RX = 8; // D2 on Wemos D1 Mini
+    constexpr static const uint8_t PIN_UART_TX = 9; // UNUSED
 
     SoftwareSerial sensorSerial(PIN_UART_RX, PIN_UART_TX);
 

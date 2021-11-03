@@ -32,7 +32,7 @@
 
 #define BATT_ADC_PIN A0 //BATTERY VOLTAGE ADC PIN
 #define BATT_ADC_MAX_RANGE 5.0 //ADC VALUE * (BATT_ADC_MAX_RANGE*1023) => ON 3.3V MCU SET THIS TO 3.3V
-
+#define CHARHING_OK_INPUT 7 //PIN FOR GETTING CHARGING STATE FROM SOLAR CHARGER LOW IF CHARGING IS ACTIVE
 
 
 
@@ -51,7 +51,7 @@ particleSensorState_t state;
 
 
 
-#define CHARHING_OK_INPUT 7 //PIN FOR GETTING CHARGING STATE FROM SOLAR CHARGER LOW IF CHARGING IS ACTIVE
+
 
 #define RFM95_RST_PIN 5 //RESET
 #define RFM95_NSS_PIN 10 //NSS / CS
@@ -136,7 +136,7 @@ void onEvent (ev_t ev) {
               Serial.println(F(" bytes of payload"));
             }
             // Schedule next transmission
-            //os_setTimedCallback(&sendjob, os_getTime()+sec2osticks(TX_INTERVAL), do_send);
+            os_setTimedCallback(&sendjob, os_getTime()+sec2osticks(TX_INTERVAL), do_send);
             break;
         case EV_LOST_TSYNC:
             Serial.println(F("EV_LOST_TSYNC"));
@@ -358,7 +358,7 @@ void setup() {
 
 unsigned long prev = 0;
 unsigned long curr = 0;
-const int interval = 1000*120;
+const int interval = 1000*60;
 
 
 void loop() {
