@@ -1,5 +1,11 @@
 #pragma once
 
+//ORIGINAL VERSION: github.com/Hypfer/esp8266-vindriktning-particle-sensor
+//MODIFIED by Marcel Ochsendorf marcelochsendorf.com
+// # 02.10.2021
+// added state.lastPM25
+// rework Serial.printf
+
 #include <SoftwareSerial.h>
 
 #include "IkeaVindriktningTypes.h"
@@ -29,7 +35,7 @@ namespace IkeaVindriktningSerialCom {
          * uint16_t = xxxxxxxx xxxxxxxx
          */
         const uint16_t pm25 = (serialRxBuf[5] << 8) | serialRxBuf[6];
-
+        state.lastPM25 = pm25;
  
         //Serial.print("Received RAW PM 2.5 reading:");
         //Serial.println(pm25);

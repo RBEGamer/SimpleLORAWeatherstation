@@ -16,6 +16,12 @@
  */
 
 
+
+//#define SENSOR_TYPE_DHT22
+#define SENSOR_TYPE_IKEA_VINDRIKTNING
+
+
+
 #include <lmic.h>
 #include <hal/hal.h>
 #include <SPI.h>
@@ -27,9 +33,6 @@
 #define BATT_ADC_PIN A0 //BATTERY VOLTAGE ADC PIN
 #define BATT_ADC_MAX_RANGE 5.0 //ADC VALUE * (BATT_ADC_MAX_RANGE*1023) => ON 3.3V MCU SET THIS TO 3.3V
 
-
-//#define SENSOR_TYPE_DHT22
-#define SENSOR_TYPE_IKEA_VINDRIKTNING
 
 
 
@@ -59,21 +62,15 @@ particleSensorState_t state;
 //-------------------- LORA CONFIG ----------------------- //
 
 #ifdef SENSOR_TYPE_DHT22
-// NwkSKey MSB
 static const PROGMEM u1_t NWKSKEY[16] = {0xCC, 0x46, 0x1B, 0x83, 0xF1, 0x79, 0xAB, 0x6D, 0x73, 0x0E, 0x7D, 0xC4, 0x9F, 0x54, 0x18, 0xDA };
-// AppSKey MSB
 static const u1_t PROGMEM APPSKEY[16] = { 0x4B, 0x51, 0x95, 0xA5, 0x45, 0x1F, 0xA9, 0x76, 0xD9, 0x50, 0xB4, 0xDA, 0x29, 0xAF, 0x01, 0x6E };
-// LoRaWAN address
-static const u4_t DEVADDR = 0x260B1A42; //UNIQUE LORA DEVICE ID
+static const u4_t DEVADDR = 0x260B1A42;
 #endif
 
 #ifdef SENSOR_TYPE_IKEA_VINDRIKTNING
-// NwkSKey MSB
 static const PROGMEM u1_t NWKSKEY[16] = {0x66, 0x1F, 0x14, 0x94, 0xC2, 0xA7, 0x7C, 0x0F, 0xE6, 0x50, 0x75, 0xDA, 0xDA, 0x73, 0x33, 0x00 };
-// AppSKey MSB
 static const u1_t PROGMEM APPSKEY[16] = { 0xB8, 0xC7, 0x43, 0x72, 0x2A, 0xD5, 0x60, 0x41, 0x1D, 0x6E, 0xEA, 0x57, 0xEA, 0x33, 0x14, 0xFB };
-// LoRaWAN address
-static const u4_t DEVADDR = 0x260B478B; //UNIQUE LORA DEVICE ID
+static const u4_t DEVADDR = 0x260B478B;
 #endif
 
 
@@ -103,6 +100,7 @@ void onEvent (ev_t ev) {
     switch(ev) {
         case EV_SCAN_TIMEOUT:
             Serial.println(F("EV_SCAN_TIMEOUT"));
+            //os_setTimedCallback(&sendjob, os_getTime()+sec2osticks(TX_INTERVAL), do_send);
             break;
         case EV_BEACON_FOUND:
             Serial.println(F("EV_BEACON_FOUND"));
@@ -138,13 +136,15 @@ void onEvent (ev_t ev) {
               Serial.println(F(" bytes of payload"));
             }
             // Schedule next transmission
-            os_setTimedCallback(&sendjob, os_getTime()+sec2osticks(TX_INTERVAL), do_send);
+            //os_setTimedCallback(&sendjob, os_getTime()+sec2osticks(TX_INTERVAL), do_send);
             break;
         case EV_LOST_TSYNC:
             Serial.println(F("EV_LOST_TSYNC"));
+            //os_setTimedCallback(&sendjob, os_getTime()+sec2osticks(TX_INTERVAL), do_send);
             break;
         case EV_RESET:
             Serial.println(F("EV_RESET"));
+            //os_setTimedCallback(&sendjob, os_getTime()+sec2osticks(TX_INTERVAL), do_send);
             break;
         case EV_RXCOMPLETE:
             // data received in ping slot
@@ -155,9 +155,11 @@ void onEvent (ev_t ev) {
             break;
         case EV_LINK_ALIVE:
             Serial.println(F("EV_LINK_ALIVE"));
+            //os_setTimedCallback(&sendjob, os_getTime()+sec2osticks(TX_INTERVAL), do_send);
             break;
          default:
             Serial.println(F("Unknown event"));
+            //os_setTimedCallback(&sendjob, os_getTime()+sec2osticks(TX_INTERVAL), do_send);
             break;
     }
 }
@@ -170,7 +172,6 @@ String payload_str = "";
 void prepare_payload_dht22(){
   float Luftfeuchtigkeit = dht.readHumidity(); //die Luftfeuchtigkeit auslesen und unter „Luftfeutchtigkeit“ speichern
   float Temperatur = dht.readTemperature();//die Temperatur auslesen und unter „Temperatur“ speichern
-  payload_str = "";
 
   // ADD TEMPERATURE
   if(isnan(Temperatur)){
@@ -186,21 +187,24 @@ void prepare_payload_dht22(){
   }else{
    payload_str.concat(Luftfeuchtigkeit);
   }
-  payload_str += ";";
   }
 #endif
 
 #ifdef SENSOR_TYPE_IKEA_VINDRIKTNING
 void prepare_payload_vindriking(){
-    payload_str = "";
-    payload_str.concat(state.avgPM25);
-    payload_str += ";";
-    
-    
+
+      for(int i = 0; i < 1000; i++){
+        IkeaVindriktningSerialCom::handleUart(state);
+        delay(10);
+      }
+
+      
+    payload_str += String(state.lastPM25); 
   }
 #endif
 
 void create_payload_buffer(){
+  payload_str = "";
   
   #ifdef SENSOR_TYPE_DHT22
   prepare_payload_dht22();
@@ -210,7 +214,7 @@ void create_payload_buffer(){
   prepare_payload_vindriking();
   #endif
 
-  
+  payload_str += ";";
   //ADD BATTERY AND CHARGING STATE
   float batt = analogRead(BATT_ADC_PIN);
   batt = batt * (BATT_ADC_MAX_RANGE/1023);
@@ -336,6 +340,13 @@ void setup() {
 
     #ifdef SENSOR_TYPE_IKEA_VINDRIKTNING
      IkeaVindriktningSerialCom::setup();
+    
+      for(int i = 0; i < 10000; i++){
+        IkeaVindriktningSerialCom::handleUart(state);
+        delay(1);
+      }
+     
+     
     #endif
 
 
@@ -344,7 +355,20 @@ void setup() {
     do_send(&sendjob);
 }
 
+
+unsigned long prev = 0;
+unsigned long curr = 0;
+const int interval = 1000*60;
+
+
 void loop() {
     os_runloop_once();
-    IkeaVindriktningSerialCom::handleUart(state);
+
+    curr = millis();
+    if(curr - prev >= interval){
+      prev = curr;
+      os_setTimedCallback(&sendjob, os_getTime()+sec2osticks(TX_INTERVAL), do_send);
+    }
+
+      
 }
