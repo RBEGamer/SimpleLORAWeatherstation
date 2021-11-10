@@ -255,20 +255,69 @@ Create a new Device Profile and use this for each sensor of this type later on.
 ##### CODEC: Javascript Decode Function
 
 ```js
-// Decode decodes an array of bytes into an object.
-//  - fPort contains the LoRaWAN fPort number
-//  - bytes is an array of bytes, e.g. [225, 230, 255, 0]
-//  - variables contains the device variables e.g. {"calibration": "3.5"} (both the key / value are of type string)
-// The function must return an object, e.g. {"temperature": 22.5}
-function Decode(fPort, bytes) {
-  var result = "";
-  for (var i = 0; i < bytes.length; i++) {
-    result += (String.fromCharCode(bytes[i]));
-  }
-  
-  var sp = String(result).split(';');
-  return {temperature: parseFloat(sp[0]), humidity: parseFloat(sp[1]), battery: parseFloat(sp[2]),charging: parseFloat(sp[3])}
-    
+//UNCOMMENT FOR TTN DOWNLINK DECODER
+//function decodeDownlink(input) {
+//const bytes = input.bytes
+//const TTN_COMPABILITY = true;
+
+// UNCOMMENT FOR CHIRPSTACK CODEC
+// function Decode(fPort, bytes) { 
+//const TTN_COMPABILITY = false;
+
+    var result = "";
+    var resobj = {
+        warnings: [],
+        errors: [],
+        data: {
+
+        }
+    };
+
+    var entryobj = {};
+
+    for (var i = 0; i < bytes.length; i++) {
+        result += (String.fromCharCode(bytes[i]));
+    }
+    //SPLIT COMPLETE STRING BY ; TO GET INDIVIDUAL ENTRIES
+    const sp = String(result).split(';');
+    if(sp){
+        //FOR EACH ENTRY
+        for(var i = 0; i < sp.length;i++){
+            if(sp[i].includes('=')){
+                //SPLIT ENTRY FOR =
+                const spe = String(sp[i]).split('=');
+                if(spe.length === 3){
+                    //PARSE EACH ENTRY <type>=<key>=<value>
+                    //s => STRING
+                    //f => float
+                    //i => int
+                    if(spe[0] === "s"){
+                        entryobj[String(spe[1])] =spe[2];
+                    }else if(spe[0] === "f"){
+                        entryobj[String(spe[1])] = parseFloat(spe[2]);
+                        //CHECK FOR Nan not a number and set to null
+                        if(isNaN(entryobj[String(spe[1])])){
+                            entryobj[String(spe[1])] = null;
+                        }
+                    }else if(spe[0] === "i"){
+                        entryobj[String(spe[1])] = parseInt(spe[2], 10);
+                        //CHECK FOR Nan not a number and set to null
+                        if(isNaN(entryobj[String(spe[1])])){
+                            entryobj[String(spe[1])] = null;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    if(TTN_COMPABILITY){
+        resobj["data"] = entryobj;
+        return resobj;
+    }else{
+        return entryobj;
+    }
+
+
 }
 ```
 
