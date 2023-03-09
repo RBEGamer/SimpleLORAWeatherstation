@@ -61,7 +61,7 @@ In this case we use the TTN provider [The Things Network (TTN)](https://www.thet
 
 * soldering iron
 
-#### SCHALTUNG
+#### SCHEMATIC
 
 The construction of the circuit is relatively simple. However, the `RFM95` module cannot be plugged directly onto the breadboard, because this uses a different grid size of 2.0mm and the breadboard 2.54mm. So solder jumperwires directly or use a custom PCB - `src/src_rfmbreadboardadapter`.
 
