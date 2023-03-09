@@ -25,6 +25,10 @@ In this case we use the TTN provider [The Things Network (TTN)](https://www.thet
 
 ![FINALER_SENSOR](documenation/images/finaler_sensor_beispiel.jpg)
 
+### WITH MOUNTED SOLAR PANEL
+
+![FINALER_SENSOR](documenation/images/2023-03-05_21.37.51.jpg)
+
 
 ### PROTOTYPE
 
